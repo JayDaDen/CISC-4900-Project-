@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function Schedule() {
-  const [schedule, setSchedule] = useState([
-    { day: 'Monday', shift: '9:00 AM - 5:00 PM' },
-    { day: 'Tuesday', shift: '10:00 AM - 6:00 PM' },
-  ]);
+  const [schedule, setSchedule] = useState([]);
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:5000/schedule', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSchedule(response.data);
+    };
+
+    fetchSchedule();
+  }, []);
 
   return (
     <div>
