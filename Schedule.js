@@ -1,31 +1,41 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { Card, CardContent, Typography, Grid } from '@mui/material';
+import './Schedule.css';  // Import custom styles
 
-function Schedule() {
-  const [schedule, setSchedule] = useState([]);
-
-  useEffect(() => {
-    const fetchSchedule = async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/schedule', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSchedule(response.data);
-    };
-
-    fetchSchedule();
-  }, []);
+const Schedule = () => {
+  const shifts = [
+    { date: 'Friday, October 4th', time: '9:00 AM - 5:00 PM', location: 'General Merchandise' },
+    { date: 'Saturday, October 5th', time: '1:00 PM - 9:00 PM', location: 'Electronics' },
+    { date: 'Sunday, October 6th', time: '10:00 AM - 6:00 PM', location: 'Customer Service' },
+  ];
 
   return (
-    <div>
-      <h2>Your Schedule</h2>
-      <ul>
-        {schedule.map((item, index) => (
-          <li key={index}>{item.day}: {item.shift}</li>
+    <div className="schedule-container">
+      <Typography variant="h4" className="schedule-title">
+        Upcoming Shifts
+      </Typography>
+
+      <Grid container spacing={4}>
+        {shifts.map((shift, index) => (
+          <Grid item xs={12} sm={6} key={index}>
+            <Card className="schedule-card">
+              <CardContent>
+                <Typography variant="h6" className="card-title">
+                  {shift.date}
+                </Typography>
+                <Typography variant="body1">
+                  Time: {shift.time}
+                </Typography>
+                <Typography variant="body1">
+                  Location: {shift.location}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </ul>
+      </Grid>
     </div>
   );
-}
+};
 
 export default Schedule;
