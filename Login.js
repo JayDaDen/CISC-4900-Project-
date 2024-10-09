@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Card, CardContent, Typography } from '@mui/material';  
+import { TextField, Button, Card, CardContent, Typography } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,33 +12,23 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:3001/login', { email, password });
-      localStorage.setItem('token', response.data.token);  // Store token in localStorage
-      localStorage.removeItem('guest');  // Remove guest flag if it was set
-      navigate('/dashboard');  // Redirect to dashboard
+      localStorage.setItem('token', response.data.token);
+      navigate('/dashboard');
     } catch (error) {
       alert('Login failed');
     }
   };
 
   const handleGuestLogin = () => {
-    localStorage.setItem('guest', 'true');  // Set a guest flag in localStorage
-    localStorage.removeItem('token');  // Clear any token if it exists
-    navigate('/dashboard');  // Redirect to dashboard
+    localStorage.setItem('guest', 'true');  // Set guest mode flag in localStorage
+    navigate('/dashboard');  // Navigate to dashboard as a guest
   };
 
   return (
     <Card style={{ maxWidth: 400, margin: 'auto', padding: '20px', marginTop: '50px' }}>
       <CardContent>
-        <Typography 
-          variant="h3" 
-          component="div" 
-          gutterBottom 
-          style={{ textAlign: 'center', color: '#d32f2f', marginBottom: '20px' }}
-        >
-          Worksite Scheduler
-        </Typography>
         <Typography variant="h5" component="div" gutterBottom>
-          Login
+          Worksite Scheduler
         </Typography>
         <form onSubmit={handleLogin}>
           <TextField
@@ -59,28 +49,22 @@ function Login() {
             margin="normal"
             variant="outlined"
           />
-          <Button 
-            type="submit" 
-            variant="contained" 
-            color="primary" 
-            fullWidth 
-            style={{ marginTop: '20px' }}
-          >
+          <Button type="submit" variant="contained" color="primary" fullWidth style={{ marginTop: '20px' }}>
             Login
           </Button>
         </form>
-        <Button 
-          onClick={handleGuestLogin} 
-          variant="outlined" 
-          color="secondary" 
-          fullWidth 
-          style={{ marginTop: '20px' }}
-        >
-          Login as Guest
-        </Button>
         <Typography style={{ marginTop: '10px' }}>
           Don't have an account? <Link to="/register">Register here</Link>
         </Typography>
+        <Button
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          style={{ marginTop: '20px' }}
+          onClick={handleGuestLogin}
+        >
+          Login as Guest
+        </Button>
       </CardContent>
     </Card>
   );
