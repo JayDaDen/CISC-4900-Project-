@@ -1,66 +1,50 @@
-*{
-    box-sizing: border-box;
-}
-.text{
-    margin-left: 10px;
-    font-weight: bold;
-    font-family: sans-serif;
-    font-size: 18px;
-}
-input{
-    margin-left: 80px;
-    display: block;
-    width: 35%;
-    height: 30px;
-    margin-bottom: 0px;
-    border-top:none;
-    border-left:none;
-    border-right:none;
-    outline:none;
-    margin-top: 50px;
+/* Import font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
+/* Styling for the login */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: white; /* Background for the entire page */
 }
-button{
-    display: block;
-    color: black;
-    width: 30px;
-    margin-left: 150px;
-    margin-top: 100px;
-    height: 30px;
-    font-size: 18px;
-    font-weight: 800;
-    font-family: sans-serif;
-    background-color: aquamarine;
-    border: none;
-    min-width: 300px;
+
+/* Styling for the header */
+.header-text {
+    text-align: left; /* Align text to the left */
+    font-family: 'Montserrat', sans-serif;
+    color: #d32f2f;  /* Red color for header */
+    margin-bottom: 40px;
+    margin-left: 20px; /* Move the header to the left */
+  }  
+
+/* Styling for the login card */
+.login-card {
+  max-width: 400px;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background-color: #f8f9fa;  /* Light gray background for the card */
 }
-button:hover{  
-    background-color: rgb(81, 234, 183);
+
+/* Red and white styling for the login button */
+.login-button {
+  background-color: #d32f2f;
+  color: white;
 }
-input:hover{
-    border-bottom-color: aquamarine ;
+
+.login-button:hover {
+  background-color: #b71c1c;  /* Darker red on hover */
 }
-h1{
-    margin-left: 100px;
-    padding-top: 75px;
+
+/* Styling for the guest login button */
+.guest-button {
+  border-color: #d32f2f; /* Red border to match theme */
+  color: #d32f2f; /* Red text to match theme */
 }
-h2{
-    margin-left: 163px;
-    font-weight: 100;
-}
-.container{
-    width: 100%;
-    height: 610px;
-    background: linear-gradient(to right, white 50%, aquamarine,cyan);
-}
-.statement{
-    margin-left: 45em;
-    font-weight: bold;
-    font-style: italic;
-    font-family: sans-serif;
-    font-size: 18px;
-}
-img{
-    margin-left: 665px;
-    margin-bottom: 300px;
+
+.guest-button:hover {
+  background-color: #fce4ec; /* Light red background on hover */
 }
