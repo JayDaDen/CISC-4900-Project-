@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { TextField, Button, Card, CardContent, Typography } from '@mui/material';  
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -11,46 +11,78 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
+      const response = await axios.post('http://localhost:3001/login', { email, password });
+      localStorage.setItem('token', response.data.token);  // Store token in localStorage
+      localStorage.removeItem('guest');  // Remove guest flag if it was set
+      navigate('/dashboard');  // Redirect to dashboard
     } catch (error) {
       alert('Login failed');
     }
   };
 
+  const handleGuestLogin = () => {
+    localStorage.setItem('guest', 'true');  // Set a guest flag in localStorage
+    localStorage.removeItem('token');  // Clear any token if it exists
+    navigate('/dashboard');  // Redirect to dashboard
+  };
+
   return (
-    <div class = "container">
-
-      <p class="text">Worksite 2024</p>
-        <h1>Welcome Back to Worksite</h1>
-
-        <h2>Please enter your details</h2>
-
-        <p class= "statement">You Work for Us, We Work for You
-          
-        <br></br>
-        <br></br>
-        Schedule viewing and editing made simple.</p>  
-
-     <div class = "form">
-      <form class = "login-form" onSubmit={handleLogin}>
-         <input
+    <Card style={{ maxWidth: 400, margin: 'auto', padding: '20px', marginTop: '50px' }}>
+      <CardContent>
+        <Typography 
+          variant="h3" 
+          component="div" 
+          gutterBottom 
+          style={{ textAlign: 'center', color: '#d32f2f', marginBottom: '20px' }}
+        >
+          Worksite Scheduler
+        </Typography>
+        <Typography variant="h5" component="div" gutterBottom>
+          Login
+        </Typography>
+        <form onSubmit={handleLogin}>
+          <TextField
+            fullWidth
+            label="Email"
             type="email"
-           placeholder="Email"
             value={email}
-           onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+            variant="outlined"
           />
-          <input
+          <TextField
+            fullWidth
+            label="Password"
             type="password"
-            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            margin="normal"
+            variant="outlined"
           />
-        <button type="submit">Login</button>
-      </form>
-      </div>
-    </div>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            color="primary" 
+            fullWidth 
+            style={{ marginTop: '20px' }}
+          >
+            Login
+          </Button>
+        </form>
+        <Button 
+          onClick={handleGuestLogin} 
+          variant="outlined" 
+          color="secondary" 
+          fullWidth 
+          style={{ marginTop: '20px' }}
+        >
+          Login as Guest
+        </Button>
+        <Typography style={{ marginTop: '10px' }}>
+          Don't have an account? <Link to="/register">Register here</Link>
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
 
