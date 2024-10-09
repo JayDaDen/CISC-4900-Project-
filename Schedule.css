@@ -1,0 +1,24 @@
+.schedule-container {
+    padding: 40px;
+    background-color: #f9f9f9;
+  }
+  
+  .schedule-title {
+    text-align: center;
+    color: #d32f2f;
+    margin-bottom: 40px;
+  }
+  
+  .schedule-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    color: #d32f2f; /* Red title */
+    margin-bottom: 15px;
+  }
+  
