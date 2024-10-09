@@ -1,71 +1,80 @@
 const express = require('express');
-const mysql = require('mysql2');
+const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const app = express();
-app.use(cors());
 app.use(express.json());
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root', 
-  password: 'password', 
-  database: 'worksite_scheduling',
-});
+// CORS configuration
+app.use(cors({
+  origin: 'http://localhost:3000',  // Frontend URL
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log('Connected to database');
+// SQLite database connection
+const db = new sqlite3.Database('./worksite_scheduling.db', (err) => {
+  if (err) {
+    console.error('Error opening database:', err.message);
+  } else {
+    console.log('Connected to SQLite database.');
+    db.run(`
+      CREATE TABLE IF NOT EXISTS employees (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+      )
+    `);
+  }
 });
 
 const secretKey = 'secret';
 
-// Register
+// Register route
 app.post('/register', (req, res) => {
   const { name, email, password } = req.body;
-  const hashedPassword = bcrypt.hashSync(password, 10);
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-  const query = 'INSERT INTO employees (name, email, password) VALUES (?, ?, ?)';
-  db.query(query, [name, email, hashedPassword], (err, result) => {
-    if (err) {
-      console.error('Error during registration:', err);
-      return res.status(500).json({ message: 'Error registering user' });
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  db.run(
+    'INSERT INTO employees (name, email, password) VALUES (?, ?, ?)',
+    [name, email, hashedPassword],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ message: 'Error registering user' });
+      }
+      res.json({ message: 'User registered successfully!' });
     }
-    res.json({ message: 'User registered successfully!' });
-  });
+  );
 });
 
-// Login
+// Login route
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
-
-  const query = 'SELECT * FROM employees WHERE email = ?';
-  db.query(query, [email], (err, results) => {
-    if (err) throw err;
-    const employee = results[0];
-    if (!employee) return res.status(400).send('Employee not found');
+  db.get('SELECT * FROM employees WHERE email = ?', [email], (err, employee) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error logging in' });
+    }
+    if (!employee) {
+      return res.status(400).json({ message: 'Employee not found' });
+    }
 
     const isValidPassword = bcrypt.compareSync(password, employee.password);
-    if (!isValidPassword) return res.status(400).send('Invalid password');
+    if (!isValidPassword) {
+      return res.status(400).json({ message: 'Invalid password' });
+    }
 
-    const token = jwt.sign({ id: employee.id }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ id: employee.id, name: employee.name }, secretKey, { expiresIn: '1h' });
     res.send({ token });
   });
 });
 
-// Fetch Schedule
-app.get('/schedule', (req, res) => {
-  const token = req.headers.authorization.split(' ')[1];
-  const decoded = jwt.verify(token, secretKey);
-
-  const query = 'SELECT * FROM schedules WHERE employee_id = ?';
-  db.query(query, [decoded.id], (err, results) => {
-    if (err) throw err;
-    res.send(results);
-  });
-});
-
-app.listen(5000, () => {
-  console.log('Server running on port 5000');
+// Start server
+app.listen(3001, () => {
+  console.log('Server running on port 3001');
 });
