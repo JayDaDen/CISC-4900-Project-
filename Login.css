@@ -1,0 +1,50 @@
+*{
+    box-sizing: border-box;
+}
+.text{
+    margin-left: 10px;
+    font-weight: bold;
+    font-style: italic;
+    font-family: sans-serif;
+    font-size: 18px;
+}
+input{
+    margin-left: 80px;
+    display: block;
+    width: 35%;
+    height: 30px;
+    margin-bottom: 50px;
+    border-top:none;
+    border-left:none;
+    border-right:none;
+    outline:none;
+}
+button{
+    display: block;
+    color: black;
+    width: 30px;
+    margin-left: 150px;
+    margin-top: 100px;
+    height: 30px;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: sans-serif;
+    background-color: aquamarine;
+    border: none;
+    min-width: 300px;
+}
+button:hover{
+   
+    background-color: rgb(81, 234, 183);
+
+}
+h1{
+    margin-left: 100px;
+    padding-top: 75px;
+    padding-bottom: 50px;
+}
+.container{
+    width: 100%;
+    height: 615px;
+    background: linear-gradient(to right, white 50%, aquamarine,cyan);
+}
